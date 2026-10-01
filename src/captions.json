@@ -1,0 +1,11 @@
+[
+  {"text":"A failed response does not mean the operation failed.","startMs":0,"endMs":6000,"timestampMs":null,"confidence":null},
+  {"text":"The server stores the order, then our test closes the connection.","startMs":6000,"endMs":11500,"timestampMs":null,"confidence":null},
+  {"text":"The client sees an error. The first order still exists.","startMs":11500,"endMs":17000,"timestampMs":null,"confidence":null},
+  {"text":"Retry without a key: a second order is created.","startMs":17000,"endMs":25000,"timestampMs":null,"confidence":null},
+  {"text":"Create one key per logical operation. Keep it for every retry.","startMs":25000,"endMs":32000,"timestampMs":null,"confidence":null},
+  {"text":"The server matches the key and payload, then replays the stored result.","startMs":32000,"endMs":39000,"timestampMs":null,"confidence":null},
+  {"text":"Retry with the same key: the original order returns. No duplicate.","startMs":39000,"endMs":49000,"timestampMs":null,"confidence":null},
+  {"text":"Same key, different payload? Reject it instead of creating another order.","startMs":49000,"endMs":55000,"timestampMs":null,"confidence":null},
+  {"text":"Run the example. Inspect the evidence. Verify the outcome.","startMs":55000,"endMs":60000,"timestampMs":null,"confidence":null}
+]

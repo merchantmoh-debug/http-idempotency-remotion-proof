@@ -1,0 +1,6 @@
+LOCAL HTTP DEMO / synthetic data
+First call: fetch failed; stored orders = 1
+No key retry: HTTP 201; ord_002; stored orders = 2
+Same key retry: HTTP 200; ord_001; replayed = true; stored orders = 1
+Changed payload, same key: HTTP 409; key_payload_conflict; stored orders = 1
+12/12 checks passed

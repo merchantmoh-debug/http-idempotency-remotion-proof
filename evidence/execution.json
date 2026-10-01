@@ -1,0 +1,105 @@
+{
+  "payload": {
+    "sku": "demo-notebook",
+    "quantity": 1
+  },
+  "key": "demo-order-001",
+  "scenarios": {
+    "unsafe": {
+      "first": {
+        "error": "fetch failed",
+        "type": "TypeError",
+        "id": "ord_001",
+        "storedOrders": 1
+      },
+      "retry": {
+        "status": 201,
+        "body": {
+          "id": "ord_002",
+          "sku": "demo-notebook",
+          "quantity": 1,
+          "replayed": false
+        }
+      },
+      "storedOrders": 2
+    },
+    "safe": {
+      "first": {
+        "error": "fetch failed",
+        "type": "TypeError",
+        "id": "ord_001",
+        "storedOrders": 1
+      },
+      "retry": {
+        "status": 200,
+        "body": {
+          "id": "ord_001",
+          "sku": "demo-notebook",
+          "quantity": 1,
+          "replayed": true
+        }
+      },
+      "storedOrders": 1,
+      "conflict": {
+        "status": 409,
+        "body": {
+          "error": "key_payload_conflict"
+        },
+        "storedOrders": 1
+      }
+    }
+  },
+  "snippet": "export async function createOrder(baseUrl, payload, key) {\n  return fetch(`${baseUrl}/orders`, {\n    method: 'POST',\n    headers: {\n      'Content-Type': 'application/json',\n      ...(key ? {'Idempotency-Key': key} : {}),\n    },\n    body: JSON.stringify(payload),\n  });\n}",
+  "checks": [
+    {
+      "label": "unsafe: first response is lost",
+      "passed": true
+    },
+    {
+      "label": "unsafe: first request committed",
+      "passed": true
+    },
+    {
+      "label": "unsafe: retry status",
+      "passed": true
+    },
+    {
+      "label": "unsafe: retry identity",
+      "passed": true
+    },
+    {
+      "label": "unsafe: stored count",
+      "passed": true
+    },
+    {
+      "label": "safe: first response is lost",
+      "passed": true
+    },
+    {
+      "label": "safe: first request committed",
+      "passed": true
+    },
+    {
+      "label": "safe: retry status",
+      "passed": true
+    },
+    {
+      "label": "safe: retry identity",
+      "passed": true
+    },
+    {
+      "label": "safe: stored count",
+      "passed": true
+    },
+    {
+      "label": "safe: changed payload is rejected",
+      "passed": true
+    },
+    {
+      "label": "safe: conflict leaves one order",
+      "passed": true
+    }
+  ],
+  "summary": "12/12 checks passed",
+  "scope": "Real loopback HTTP; synthetic data; sequential retries; in-memory single-process service."
+}
